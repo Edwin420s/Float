@@ -1,4 +1,3 @@
-import Sidebar from '../components/Sidebar'
 import WalletCard from '../components/WalletCard'
 import NotificationToggle from '../components/NotificationToggle'
 import ProfileForm from '../components/ProfileForm'

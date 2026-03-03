@@ -19,7 +19,7 @@ const transactionData = [
 export default function CashFlowChart() {
   return (
     <div className="bg-surface p-4 rounded-xl shadow-lg h-64">
-      <h3 className="text-lg font-semibold mb-4">Cash Flow (last 7 days)</h3>
+      <h3 className="text-lg font-semibold mb-4">Cash Flow Chart</h3>
       <ResponsiveContainer width="100%" height="60%">
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="#2D3748" />
@@ -32,7 +32,6 @@ export default function CashFlowChart() {
       </ResponsiveContainer>
       
       <div className="mt-4 border-t border-gray-700 pt-4">
-        <h4 className="text-sm font-semibold mb-2">Recent Transactions</h4>
         <ResponsiveContainer width="100%" height="30%">
           <BarChart data={transactionData}>
             <XAxis dataKey="name" stroke="#CBD5E1" tick={{ fontSize: 10 }} />

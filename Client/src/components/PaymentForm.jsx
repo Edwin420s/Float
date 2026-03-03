@@ -12,7 +12,11 @@ const schema = z.object({
 
 export default function PaymentForm({ onSubmit }) {
   const { register, handleSubmit, formState: { errors } } = useForm({
-    resolver: zodResolver(schema)
+    resolver: zodResolver(schema),
+    defaultValues: {
+      to: 'Supplier Co.',
+      amount: 6000,
+    }
   })
 
   return (

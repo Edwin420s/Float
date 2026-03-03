@@ -11,7 +11,6 @@ const navItems = [
 export default function Sidebar() {
   return (
     <aside className="bg-surface w-64 p-6 space-y-4 hidden md:block">
-      <div className="text-2xl font-bold mb-8">Float</div>
       <nav className="space-y-2">
         {navItems.map(item => (
           <NavLink
