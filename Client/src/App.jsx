@@ -22,21 +22,27 @@ function App() {
       <WalletProvider>
         <TreasuryProvider>
           <div className="min-h-screen bg-primary text-white">
-            <Header />
-            <div className="flex">
-              <Sidebar />
-              <main className="flex-1">
-                <Routes>
-                  <Route path="/" element={<LandingPage />} />
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/treasury" element={<Treasury />} />
-                  <Route path="/transactions" element={<Transactions />} />
-                  <Route path="/settings" element={<Settings />} />
-                  <Route path="/demo" element={<DemoFlow />} />
-                  <Route path="*" element={<Navigate to="/" />} />
-                </Routes>
-              </main>
-            </div>
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/*" element={
+                <>
+                  <Header />
+                  <div className="flex">
+                    <Sidebar />
+                    <main className="flex-1">
+                      <Routes>
+                        <Route path="/dashboard" element={<Dashboard />} />
+                        <Route path="/treasury" element={<Treasury />} />
+                        <Route path="/transactions" element={<Transactions />} />
+                        <Route path="/settings" element={<Settings />} />
+                        <Route path="/demo" element={<DemoFlow />} />
+                        <Route path="*" element={<Navigate to="/dashboard" />} />
+                      </Routes>
+                    </main>
+                  </div>
+                </>
+              } />
+            </Routes>
             <ToastContainer position="bottom-right" theme="dark" />
           </div>
         </TreasuryProvider>

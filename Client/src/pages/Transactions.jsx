@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useWallet } from '../context/WalletContext'
 import { submitPayment } from '../utils/api'
-import Sidebar from '../components/Sidebar'
 import PaymentForm from '../components/PaymentForm'
 import PaymentTable from '../components/PaymentTable'
 import ApprovalModal from '../components/ApprovalModal'
@@ -41,35 +40,32 @@ export default function Transactions() {
   }
 
   return (
-    <div className="flex">
-      <Sidebar />
-      <main className="flex-1 p-8">
-        <h1 className="text-3xl font-bold mb-6">Transactions</h1>
+    <main className="p-8">
+      <h1 className="text-3xl font-bold mb-6">Transactions</h1>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          <PaymentForm onSubmit={handlePayment} />
+      <div className="grid md:grid-cols-2 gap-6">
+        <PaymentForm onSubmit={handlePayment} />
 
-          <div>
-            <PaymentTable payments={payments} />
-            <div className="mt-4">
-              <h3 className="text-lg font-semibold mb-2">Pending Approvals</h3>
-              {payments.filter(p => p.status === 'pending').map(tx => (
-                <div key={tx.id} className="bg-surface p-3 rounded-lg flex justify-between items-center mb-2">
-                  <span>{tx.to} – {tx.amount} USD</span>
-                  <button onClick={() => openApproval(tx)} className="text-secondary hover:underline">Approve</button>
-                </div>
-              ))}
-            </div>
+        <div>
+          <PaymentTable payments={payments} />
+          <div className="mt-4">
+            <h3 className="text-lg font-semibold mb-2">Pending Approvals</h3>
+            {payments.filter(p => p.status === 'pending').map(tx => (
+              <div key={tx.id} className="bg-surface p-3 rounded-lg flex justify-between items-center mb-2">
+                <span>{tx.to} – {tx.amount} USDC</span>
+                <button onClick={() => openApproval(tx)} className="text-secondary hover:underline">Approve</button>
+              </div>
+            ))}
           </div>
         </div>
+      </div>
 
-        <ApprovalModal
-          isOpen={modalOpen}
-          onClose={() => setModalOpen(false)}
-          onApprove={handleApprove}
-          transaction={selectedTx}
-        />
-      </main>
-    </div>
+      <ApprovalModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onApprove={handleApprove}
+        transaction={selectedTx}
+      />
+    </main>
   )
 }

@@ -14,7 +14,7 @@ export default function LandingPage() {
   }
 
   return (
-    <div>
+    <main>
       <HeroSection onConnect={handleConnect} />
       <section className="max-w-6xl mx-auto px-4 py-16 grid md:grid-cols-3 gap-8">
         <FeatureCard
@@ -34,6 +34,6 @@ export default function LandingPage() {
         />
       </section>
       <Footer />
-    </div>
+    </main>
   )
 }
