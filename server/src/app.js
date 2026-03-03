@@ -9,6 +9,7 @@ const treasuryRoutes = require('./routes/treasuryRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const agentRoutes = require('./routes/agentRoutes');
 const errorHandler = require('./middleware/errorHandler');
+const rateLimiter = require('./middleware/rateLimiter');
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/treasury', treasuryRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/agent', agentRoutes);
+app.use('/api', rateLimiter); 
 
 // Health check
 app.get('/health', (req, res) => res.send('OK'));
