@@ -1,33 +1,71 @@
 const { User, Treasury, Transaction } = require('../models');
-const blockchainService = require('./blockchainService');
+const { Op } = require('sequelize');
 
-// Generate an optimization recommendation for the SME
+/**
+ * Generate a treasury optimization recommendation for the SME.
+ * Uses a simple rule-based engine for hackathon MVP.
+ */
 exports.generateRecommendation = async (userId) => {
-  // Get user data, treasury, recent transactions
   const user = await User.findByPk(userId);
   const treasury = await Treasury.findOne({ where: { userId } });
-  const recentPayments = await Transaction.findAll({
-    where: { userId, type: 'payment' },
-    limit: 10,
-    order: [['createdAt', 'DESC']],
-  });
 
-  // Simulate analysis: check if there's an upcoming invoice with early-payment discount
-  // For demo, we'll return a hardcoded recommendation
-  const recommendation = {
-    type: 'pay_early',
-    title: 'Pay invoice early to save 9%',
-    description: 'Supplier Co. invoice due in 3 days offers 3% discount if paid now. Your current liquidity is sufficient.',
-    potentialSavings: 180, // USD
-    action: {
-      type: 'payment',
-      recipient: 'Supplier Co.',
+  // Mock upcoming invoices – in real app you'd fetch from an accounting system
+  const upcomingInvoices = [
+    {
+      id: 'inv_001',
+      supplier: 'Supplier Co.',
       amount: 6000,
-      discount: 3,
+      dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 days
+      discount: 0.03, // 3% early payment discount
+      discountWindow: 2, // days left to get discount
     },
-    reasoning: 'By paying now you avoid borrowing at 12% interest and capture the discount.',
+  ];
+
+  // Simulate current balances
+  const balances = {
+    base: 12300,      // USDC on Base
+    mpesa: 45000,     // KES
+    airtel: 32000,    // KES
+    bank: 5000,       // KES
   };
 
-  // In a real agent, you'd run an optimization algorithm here
-  return recommendation;
+  // Evaluate each invoice
+  for (const invoice of upcomingInvoices) {
+    const daysUntilDue = Math.ceil((invoice.dueDate - new Date()) / (1000 * 60 * 60 * 24));
+    const hasDiscount = invoice.discountWindow >= daysUntilDue && invoice.discount > 0;
+
+    // Check if we have enough liquidity to pay early
+    const neededInUSD = invoice.amount; // assume invoice is USD
+    const baseBalance = balances.base;
+
+    if (hasDiscount && baseBalance >= neededInUSD) {
+      // Calculate savings
+      const savings = invoice.amount * invoice.discount;
+      return {
+        type: 'pay_early',
+        title: `Pay ${invoice.supplier} early to save ${(invoice.discount * 100).toFixed(0)}%`,
+        description: `Invoice #${invoice.id} due in ${daysUntilDue} days offers ${invoice.discount * 100}% discount if paid now. Your Base wallet has sufficient funds.`,
+        potentialSavings: savings,
+        action: {
+          type: 'payment',
+          recipient: invoice.supplier,
+          amount: invoice.amount,
+          discount: invoice.discount * 100,
+          invoiceId: invoice.id,
+        },
+        reasoning: `By paying now you save $${savings} and avoid potential borrowing at 12% interest.`,
+      };
+    }
+  }
+
+  // If no early payment opportunity, check if borrowing is needed
+  // ... (simplified)
+  return {
+    type: 'info',
+    title: 'All invoices on track',
+    description: 'No immediate action needed. Your liquidity is healthy.',
+    potentialSavings: 0,
+    action: null,
+    reasoning: 'All upcoming obligations are covered.',
+  };
 };
