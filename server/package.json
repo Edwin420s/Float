@@ -4,11 +4,15 @@
   "description": "Autonomous SME treasury backend",
   "main": "src/server.js",
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js",
-    "migrate": "npx sequelize-cli db:migrate",
-    "migrate:undo": "npx sequelize-cli db:migrate:undo",
-    "test": "jest"
+  "start": "node src/server.js",
+  "dev": "nodemon src/server.js",
+  "migrate": "npx sequelize-cli db:migrate",
+  "migrate:undo": "npx sequelize-cli db:migrate:undo",
+  "seed": "node scripts/seed.js",
+  "test": "jest",
+  "docker:up": "docker-compose up -d",
+  "docker:down": "docker-compose down"
+}
   },
   "dependencies": {
     "express": "^4.18.2",
