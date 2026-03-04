@@ -5,25 +5,30 @@ import ProfileForm from '../components/ProfileForm'
 export default function Settings() {
   return (
     <main className="p-8">
-      <h1 className="text-3xl font-bold mb-6">Settings</h1>
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold mb-2">Settings</h1>
+        <p className="text-textSecondary text-lg">Manage your account and preferences</p>
+      </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
-        <div className="bg-surface p-6 rounded-xl space-y-6">
-          <h2 className="text-xl font-semibold">Wallet</h2>
+      <div className="grid md:grid-cols-2 gap-8 mb-8">
+        <div className="bg-surface p-8 rounded-xl shadow-lg space-y-6">
+          <h2 className="text-2xl font-semibold">Wallet</h2>
           <WalletCard />
         </div>
 
-        <div className="bg-surface p-6 rounded-xl">
-          <h2 className="text-xl font-semibold mb-4">Profile</h2>
+        <div className="bg-surface p-8 rounded-xl shadow-lg">
+          <h2 className="text-2xl font-semibold mb-6">Profile</h2>
           <ProfileForm />
         </div>
       </div>
 
-      <div className="bg-surface p-6 rounded-xl mt-6">
-        <h2 className="text-xl font-semibold mb-4">Notifications</h2>
-        <NotificationToggle label="Payment confirmations" defaultChecked />
-        <NotificationToggle label="Agent recommendations" defaultChecked />
-        <NotificationToggle label="Approval requests" />
+      <div className="bg-surface p-8 rounded-xl shadow-lg">
+        <h2 className="text-2xl font-semibold mb-6">Notifications</h2>
+        <div className="space-y-4">
+          <NotificationToggle label="Payment confirmations" defaultChecked />
+          <NotificationToggle label="Agent recommendations" defaultChecked />
+          <NotificationToggle label="Approval requests" />
+        </div>
       </div>
     </main>
   )

@@ -41,11 +41,7 @@ export default function DemoFlow() {
 
   return (
     <main className="p-8">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-2">Demo Flow Guide</h1>
-        <p className="text-textSecondary text-lg">Experience autonomous treasury management</p>
-      </div>
-      
+      <h1 className="text-3xl font-bold mb-6">Demo Flow Guide</h1>
       <DemoProgressBar step={step} totalSteps={5} />
 
       <div className="mt-8 grid md:grid-cols-2 gap-8">
@@ -53,16 +49,16 @@ export default function DemoFlow() {
           {steps.map(s => (
             <DemoStep key={s.number} number={s.number} title={s.title} isActive={step === s.number}>
               {s.number === 2 && (
-                <p className="mb-4 text-lg">Agent recommends: Pay invoice early to save 9% (avoid 12% borrowing cost).</p>
+                <p className="mb-4">Agent recommends: Pay invoice early to save 9% (avoid 12% borrowing cost).</p>
               )}
               {s.number === 3 && (
-                <p className="mb-4 text-lg">Payment to Supplier Co. · 6,000 USDC</p>
+                <p className="mb-4">Payment to Supplier Co. · 6,000 USDC</p>
               )}
               {s.number === 4 && (
-                <p className="mb-4 text-lg">Processing on Base...</p>
+                <p className="mb-4">Processing on Base...</p>
               )}
               {s.number === 5 && (
-                <p className="text-success text-lg">✓ Payment Confirmed! Risk Fee Paid! <br /> Tx: 0x7a3...d9e2</p>
+                <p className="text-success">✓ Payment Confirmed! Risk Fee Paid! <br /> Tx: 0x7a3...d9e2</p>
               )}
               {s.action && step === s.number && (
                 <CTAButton onClick={s.action} className="mt-4">
@@ -73,25 +69,23 @@ export default function DemoFlow() {
           ))}
         </div>
 
-        <div className="bg-surface p-8 rounded-xl shadow-lg">
-          <h2 className="text-2xl font-semibold mb-6">Current State</h2>
-          <div className="space-y-3 mb-6">
-            <p className="text-textSecondary">Total Balance: <span className="text-white font-mono">{balance.base} USDC</span></p>
-            <p className="text-textSecondary">M-Pesa: <span className="text-white font-mono">{balance.mpesa} KES</span></p>
-            <p className="text-textSecondary">Airtel: <span className="text-white font-mono">{balance.airtel} KES</span></p>
-          </div>
+        <div className="bg-surface p-6 rounded-xl">
+          <h2 className="text-xl font-semibold mb-4">Current State</h2>
+          <p className="text-textSecondary">Total Balance: {balance.base} USDC</p>
+          <p className="text-textSecondary">M-Pesa: {balance.mpesa} KES</p>
+          <p className="text-textSecondary">Airtel: {balance.airtel} KES</p>
           {step === 2 && (
-            <div className="mt-4 p-4 border border-secondary rounded-lg bg-secondary bg-opacity-10">
+            <div className="mt-4 p-3 border border-secondary rounded">
               <p className="text-secondary">⭐ Recommendation: Pay invoice early to save 9%.</p>
             </div>
           )}
           {step === 3 && (
-            <div className="mt-4 p-4 border border-warning rounded-lg bg-warning bg-opacity-10">
+            <div className="mt-4 p-3 border border-warning rounded">
               <p className="text-warning">⏳ Payment in progress...</p>
             </div>
           )}
           {step === 5 && (
-            <div className="mt-4 p-4 border border-success rounded-lg bg-success bg-opacity-10">
+            <div className="mt-4 p-3 border border-success rounded">
               <p className="text-success">✅ Payment Confirmed! Risk Fee Paid!</p>
             </div>
           )}
@@ -102,7 +96,7 @@ export default function DemoFlow() {
         <button
           onClick={prevStep}
           disabled={step === 1}
-          className="px-6 py-3 bg-surface rounded-lg disabled:opacity-50 font-medium"
+          className="px-4 py-2 bg-surface rounded disabled:opacity-50"
         >
           Previous
         </button>
@@ -110,7 +104,7 @@ export default function DemoFlow() {
           <button
             onClick={nextStep}
             disabled={step === 5}
-            className="px-6 py-3 bg-secondary text-primary rounded-lg disabled:opacity-50 font-medium"
+            className="px-4 py-2 bg-secondary text-primary rounded disabled:opacity-50"
           >
             Next
           </button>

@@ -28,9 +28,10 @@ export default function PaymentForm({ onSubmit }) {
         {errors.to && <p className="text-error text-sm">{errors.to.message}</p>}
       </div>
       <div>
-        <label className="block text-textSecondary mb-1">Amount (USD)</label>
+        <label className="block text-textSecondary mb-1">Amount (USDC)</label>
         <input type="number" {...register('amount', { valueAsNumber: true })} className="w-full bg-primary p-2 rounded" />
         {errors.amount && <p className="text-error text-sm">{errors.amount.message}</p>}
+        <p className="text-textSecondary text-sm mt-1">6,000 USDC</p>
       </div>
       <div>
         <label className="block text-textSecondary mb-1">Payment Method</label>

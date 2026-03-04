@@ -23,17 +23,24 @@ export default function Dashboard() {
 
   return (
     <main className="p-8">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-2">Welcome Back</h1>
-        <p className="text-textSecondary text-lg">Here's your financial overview</p>
+      <h1 className="text-3xl font-bold mb-2">Welcome Back</h1>
+      <p className="text-textSecondary mb-6">Here's your financial overview</p>
+
+      <div className="grid lg:grid-cols-3 gap-6 mb-6">
+        <BalanceCard baseBalance={balance.base} mpesa={balance.mpesa} airtel={balance.airtel} />
+        <div className="lg:col-span-2">
+          <CashFlowChart />
+        </div>
       </div>
 
-      {/* Top Section - Balance and Cash Flow */}
-      <div className="grid lg:grid-cols-2 gap-8 mb-8">
-        <div className="space-y-6">
+      <div className="grid lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <TransactionTable transactions={transactions} loading={loading} />
+        </div>
+        <div>
           <WalletCard />
-          <div className="space-y-4">
-            <h3 className="text-xl font-semibold">Agent Recommendations</h3>
+          <div className="mt-4 space-y-2">
+            <h3 className="text-lg font-semibold">Agent Recommendations</h3>
             {recommendations.map(rec => (
               <RecommendationCard 
                 key={rec.id} 
@@ -44,19 +51,6 @@ export default function Dashboard() {
               />
             ))}
           </div>
-        </div>
-        <div>
-          <BalanceCard baseBalance={balance.base} mpesa={balance.mpesa} airtel={balance.airtel} />
-        </div>
-      </div>
-
-      {/* Bottom Section - Cash Flow and Transactions */}
-      <div className="grid lg:grid-cols-2 gap-8">
-        <div>
-          <CashFlowChart />
-        </div>
-        <div>
-          <TransactionTable transactions={transactions} loading={loading} />
         </div>
       </div>
     </main>

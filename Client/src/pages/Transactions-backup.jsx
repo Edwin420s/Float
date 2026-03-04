@@ -41,22 +41,19 @@ export default function Transactions() {
 
   return (
     <main className="p-8">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-2">Transactions</h1>
-        <p className="text-textSecondary text-lg">Manage your payments and approvals</p>
-      </div>
+      <h1 className="text-3xl font-bold mb-6">Transactions</h1>
 
-      <div className="grid md:grid-cols-2 gap-8 mb-8">
+      <div className="grid md:grid-cols-2 gap-6">
         <PaymentForm onSubmit={handlePayment} />
 
-        <div className="space-y-6">
+        <div>
           <PaymentTable payments={payments} />
-          <div className="bg-surface p-6 rounded-xl shadow-lg">
-            <h3 className="text-xl font-semibold mb-4">Pending Approvals</h3>
+          <div className="mt-4">
+            <h3 className="text-lg font-semibold mb-2">Pending Approvals</h3>
             {payments.filter(p => p.status === 'pending').map(tx => (
-              <div key={tx.id} className="bg-primary p-4 rounded-lg flex justify-between items-center mb-3">
-                <span className="font-medium">{tx.to} – {tx.amount} USDC</span>
-                <button onClick={() => openApproval(tx)} className="text-secondary hover:underline font-medium">Approve</button>
+              <div key={tx.id} className="bg-surface p-3 rounded-lg flex justify-between items-center mb-2">
+                <span>{tx.to} – {tx.amount} USDC</span>
+                <button onClick={() => openApproval(tx)} className="text-secondary hover:underline">Approve</button>
               </div>
             ))}
           </div>

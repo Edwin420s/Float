@@ -15,7 +15,6 @@ export const TreasuryProvider = ({ children }) => {
   ])
   const [recommendations, setRecommendations] = useState([
     { id: 1, text: 'Pay invoice early to save 9%', type: 'positive' },
-    { id: 2, text: 'Consider moving surplus to reserve', type: 'info' },
   ])
 
   const updateAllocation = (newAlloc) => setAllocation(newAlloc)
