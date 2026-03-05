@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css'
 
 // Components
 import Header from './components/Header'
+import WalletModal from './components/WalletModal'
 
 // Pages
 import LandingPage from './pages/LandingPage'
@@ -39,6 +40,7 @@ function App() {
                 </>
               } />
             </Routes>
+            <WalletModal />
             <ToastContainer position="bottom-right" theme="dark" />
           </div>
         </TreasuryProvider>

@@ -2,7 +2,7 @@ import { useWallet } from '../context/WalletContext'
 import CTAButton from './CTAButton'
 
 export default function WalletCard() {
-  const { address, connected, connect, disconnect } = useWallet()
+  const { address, connected, selectedWallet, openWalletModal, disconnect } = useWallet()
 
   if (!connected) {
     return (
@@ -13,7 +13,7 @@ export default function WalletCard() {
           </div>
           <p className="text-textSecondary">Connect your wallet to start</p>
         </div>
-        <CTAButton onClick={connect} className="w-full">Connect Wallet</CTAButton>
+        <CTAButton onClick={openWalletModal} className="w-full">Connect Wallet</CTAButton>
       </div>
     )
   }
@@ -24,7 +24,10 @@ export default function WalletCard() {
         <h3 className="text-lg font-semibold">Wallet Status</h3>
         <div className="w-3 h-3 bg-success rounded-full"></div>
       </div>
-      <p className="text-textSecondary mb-2">Connected</p>
+      <div className="flex items-center space-x-2 mb-2">
+        {selectedWallet && <span className="text-lg">{selectedWallet.icon}</span>}
+        <p className="text-textSecondary">Connected to {selectedWallet?.name}</p>
+      </div>
       <p className="font-mono text-sm mb-4 p-3 bg-primary rounded">{address.slice(0,6)}...{address.slice(-4)}</p>
       <button onClick={disconnect} className="text-error hover:underline text-sm font-medium">Disconnect</button>
     </div>

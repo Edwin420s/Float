@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom'
 import { useWallet } from '../context/WalletContext'
 
 export default function Header() {
-  const { connected, address, connect } = useWallet()
+  const { connected, address, selectedWallet, openWalletModal, disconnect } = useWallet()
 
   return (
     <header className="bg-surface border-b border-gray-700 px-6 py-4">
@@ -63,15 +63,24 @@ export default function Header() {
         {/* Wallet Connection */}
         <div className="flex items-center space-x-4">
           {connected ? (
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-success rounded-full"></div>
-              <span className="text-sm text-textSecondary">
-                {address?.slice(0, 6)}...{address?.slice(-4)}
-              </span>
+            <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-2">
+                {selectedWallet && <span className="text-lg">{selectedWallet.icon}</span>}
+                <div className="w-2 h-2 bg-success rounded-full"></div>
+                <span className="text-sm text-textSecondary">
+                  {address?.slice(0, 6)}...{address?.slice(-4)}
+                </span>
+              </div>
+              <button
+                onClick={disconnect}
+                className="text-textSecondary hover:text-white text-sm"
+              >
+                Disconnect
+              </button>
             </div>
           ) : (
             <button
-              onClick={connect}
+              onClick={openWalletModal}
               className="bg-secondary text-primary px-4 py-2 rounded-lg text-sm font-semibold hover:bg-opacity-90 transition"
             >
               Connect Wallet

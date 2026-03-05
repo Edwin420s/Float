@@ -1,6 +1,15 @@
+import { useWallet } from '../context/WalletContext'
+import { useNavigate } from 'react-router-dom'
 import CTAButton from './CTAButton'
 
 export default function HeroSection({ onConnect }) {
+  const { openWalletModal } = useWallet()
+  const navigate = useNavigate()
+
+  const handleConnect = () => {
+    openWalletModal()
+  }
+
   return (
     <div className="text-center py-16 px-4">
       {/* Logo and Title */}
@@ -29,7 +38,7 @@ export default function HeroSection({ onConnect }) {
       </div>
 
       {/* CTA Button */}
-      <CTAButton onClick={onConnect} className="text-lg px-8 py-4">Connect Wallet</CTAButton>
+      <CTAButton onClick={handleConnect} className="text-lg px-8 py-4">Connect Wallet</CTAButton>
     </div>
   )
 }
