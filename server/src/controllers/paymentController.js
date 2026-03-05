@@ -2,6 +2,7 @@ const { Transaction, User } = require('../models');
 const blockchainService = require('../services/blockchainService');
 const mobileMoneyService = require('../services/mobileMoneyService');
 const paymentQueue = require('../jobs/paymentQueue');
+const logger = require('../utils/logger');
 
 // POST /api/payment
 exports.createPayment = async (req, res, next) => {

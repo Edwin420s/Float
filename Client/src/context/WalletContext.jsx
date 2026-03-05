@@ -311,7 +311,7 @@ export const WalletProvider = ({ children }) => {
           toast.success(`${wallet.name} connected`)
           // Redirect to dashboard after successful connection
           navigate('/dashboard')
-        }, 2000)
+        }, 1000)
       }
       
       setConnected(true)
