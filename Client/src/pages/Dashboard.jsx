@@ -30,6 +30,19 @@ export default function Dashboard() {
 
       {/* Top Section - Balance and Cash Flow */}
       <div className="grid lg:grid-cols-2 gap-8 mb-8">
+        <div>
+          <BalanceCard baseBalance={balance.base} mpesa={balance.mpesa} airtel={balance.airtel} />
+        </div>
+        <div>
+          <CashFlowChart />
+        </div>
+      </div>
+
+      {/* Bottom Section - Transactions and Recommendations */}
+      <div className="grid lg:grid-cols-2 gap-8">
+        <div>
+          <TransactionTable transactions={transactions} loading={loading} />
+        </div>
         <div className="space-y-6">
           <WalletCard />
           <div className="space-y-4">
@@ -44,19 +57,6 @@ export default function Dashboard() {
               />
             ))}
           </div>
-        </div>
-        <div>
-          <BalanceCard baseBalance={balance.base} mpesa={balance.mpesa} airtel={balance.airtel} />
-        </div>
-      </div>
-
-      {/* Bottom Section - Cash Flow and Transactions */}
-      <div className="grid lg:grid-cols-2 gap-8">
-        <div>
-          <CashFlowChart />
-        </div>
-        <div>
-          <TransactionTable transactions={transactions} loading={loading} />
         </div>
       </div>
     </main>

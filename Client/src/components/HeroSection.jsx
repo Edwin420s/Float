@@ -18,7 +18,7 @@ export default function HeroSection({ onConnect }) {
 
       {/* Main Tagline */}
       <p className="text-3xl max-w-4xl mx-auto mb-12 leading-tight">
-        Automate Your SME Treasury — Optimize Liquidity. Make Intelligent Payments.
+        Automate Your SME Treasury Optimize Liquidity. Make Intelligent Payments.
       </p>
 
       {/* Feature Pills */}

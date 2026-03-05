@@ -12,6 +12,7 @@
     "@coinbase/wallet-sdk": "^3.9.0",
     "@hookform/resolvers": "^5.2.2",
     "@walletconnect/web3wallet": "^1.9.0",
+    "axios": "^1.13.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.0",
