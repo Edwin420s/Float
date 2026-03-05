@@ -1,6 +1,7 @@
 import { createContext, useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { connectWallet, authenticateUser } from '../utils/api'
 
 const WalletContext = createContext()
 
@@ -17,6 +18,7 @@ export const WalletProvider = ({ children }) => {
   const [connected, setConnected] = useState(false)
   const [showWalletModal, setShowWalletModal] = useState(false)
   const [selectedWallet, setSelectedWallet] = useState(null)
+  const [loading, setLoading] = useState(false)
 
   // Detect available wallet extensions
   const detectWallets = () => {
@@ -50,194 +52,6 @@ export const WalletProvider = ({ children }) => {
         icon: '🔗',
         provider: window.ethereum
       })
-    }
-    
-    // Phantom (Solana)
-    if (typeof window !== 'undefined' && window.solana?.isPhantom) {
-      wallets.push({
-        id: 'phantom',
-        name: 'Phantom',
-        icon: '👻',
-        provider: window.solana
-      })
-    }
-    
-    // Trust Wallet
-    if (typeof window !== 'undefined' && window.trustwallet) {
-      wallets.push({
-        id: 'trustwallet',
-        name: 'Trust Wallet',
-        icon: '🛡️',
-        provider: window.trustwallet
-      })
-    }
-    
-    // Brave Wallet (Brave browser)
-    if (typeof window !== 'undefined' && window.ethereum?.isBraveWallet) {
-      wallets.push({
-        id: 'brave',
-        name: 'Brave Wallet',
-        icon: '🦁',
-        provider: window.ethereum
-      })
-    }
-    
-    // Opera Wallet
-    if (typeof window !== 'undefined' && window.ethereum?.isOpera) {
-      wallets.push({
-        id: 'opera',
-        name: 'Opera Wallet',
-        icon: '🎭',
-        provider: window.ethereum
-      })
-    }
-    
-    // Rainbow Wallet
-    if (typeof window !== 'undefined' && window.rainbow) {
-      wallets.push({
-        id: 'rainbow',
-        name: 'Rainbow',
-        icon: '🌈',
-        provider: window.rainbow
-      })
-    }
-    
-    // Frame Wallet
-    if (typeof window !== 'undefined' && window.frame) {
-      wallets.push({
-        id: 'frame',
-        name: 'Frame',
-        icon: '🖼️',
-        provider: window.frame
-      })
-    }
-    
-    // XDEFI Wallet
-    if (typeof window !== 'undefined' && window.xdefi) {
-      wallets.push({
-        id: 'xdefi',
-        name: 'XDEFI Wallet',
-        icon: '⚡',
-        provider: window.xdefi
-      })
-    }
-    
-    // Exodus Wallet
-    if (typeof window !== 'undefined' && window.exodus) {
-      wallets.push({
-        id: 'exodus',
-        name: 'Exodus',
-        icon: '🦋',
-        provider: window.exodus
-      })
-    }
-    
-    // MathWallet
-    if (typeof window !== 'undefined' && window.mathwallet) {
-      wallets.push({
-        id: 'mathwallet',
-        name: 'MathWallet',
-        icon: '🧮',
-        provider: window.mathwallet
-      })
-    }
-    
-    // SafePal Wallet
-    if (typeof window !== 'undefined' && window.safepal) {
-      wallets.push({
-        id: 'safepal',
-        name: 'SafePal',
-        icon: '🔐',
-        provider: window.safepal
-      })
-    }
-    
-    // Zengo Wallet
-    if (typeof window !== 'undefined' && window.zengo) {
-      wallets.push({
-        id: 'zengo',
-        name: 'Zengo',
-        icon: '🔑',
-        provider: window.zengo
-      })
-    }
-    
-    // Atomic Wallet
-    if (typeof window !== 'undefined' && window.atomicwallet) {
-      wallets.push({
-        id: 'atomicwallet',
-        name: 'Atomic Wallet',
-        icon: '⚛️',
-        provider: window.atomicwallet
-      })
-    }
-    
-    // Ledger Live
-    if (typeof window !== 'undefined' && window.ledgerlive) {
-      wallets.push({
-        id: 'ledgerlive',
-        name: 'Ledger Live',
-        icon: '📱',
-        provider: window.ledgerlive
-      })
-    }
-    
-    // Trezor Wallet
-    if (typeof window !== 'undefined' && window.trezor) {
-      wallets.push({
-        id: 'trezor',
-        name: 'Trezor Wallet',
-        icon: '🔒',
-        provider: window.trezor
-      })
-    }
-    
-    // Check for multiple ethereum providers (window.ethereum array)
-    if (typeof window !== 'undefined' && window.ethereum && Array.isArray(window.ethereum.providers)) {
-      window.ethereum.providers.forEach((provider, index) => {
-        if (provider.isMetaMask && !wallets.find(w => w.id === 'metamask')) {
-          wallets.push({
-            id: 'metamask',
-            name: 'MetaMask',
-            icon: '🦊',
-            provider: provider
-          })
-        } else if (provider.isCoinbaseWallet && !wallets.find(w => w.id === 'coinbase')) {
-          wallets.push({
-            id: 'coinbase',
-            name: 'Coinbase Wallet',
-            icon: '🔵',
-            provider: provider
-          })
-        } else if (provider.isBraveWallet && !wallets.find(w => w.id === 'brave')) {
-          wallets.push({
-            id: 'brave',
-            name: 'Brave Wallet',
-            icon: '🦁',
-            provider: provider
-          })
-        } else if (provider.isOpera && !wallets.find(w => w.id === 'opera')) {
-          wallets.push({
-            id: 'opera',
-            name: 'Opera Wallet',
-            icon: '🎭',
-            provider: provider
-          })
-        }
-      })
-    }
-    
-    // Check window.web3 for older wallets
-    if (typeof window !== 'undefined' && window.web3 && window.web3.currentProvider) {
-      const provider = window.web3.currentProvider
-      if (provider.isMetaMask && !wallets.find(w => w.id === 'metamask')) {
-        wallets.push({
-          id: 'metamask',
-          name: 'MetaMask (Legacy)',
-          icon: '🦊',
-          provider: provider
-        })
-      }
     }
     
     // Add demo wallets if no real wallets detected
@@ -278,50 +92,50 @@ export const WalletProvider = ({ children }) => {
     
     setSelectedWallet(wallet)
     setShowWalletModal(false)
+    setLoading(true)
     
     try {
+      let walletAddress = null
+      
       if (wallet.provider) {
         // Real wallet connection
-        if (wallet.id === 'phantom') {
-          // Solana wallet connection
-          const response = await wallet.provider.connect()
-          setAddress(response.publicKey.toString())
-        } else if (wallet.id === 'trezor' || wallet.id === 'ledgerlive') {
-          // Hardware wallet connection (simplified)
-          // In real implementation, you'd use specific libraries for these
-          setTimeout(() => {
-            setAddress('0x742d35Cc6634C0532925a3b844Bc454e4438f44e')
-            setConnected(true)
-            toast.success(`${wallet.name} connected`)
-            // Redirect to dashboard after successful connection
-            navigate('/dashboard')
-          }, 2000)
-        } else {
+        if (wallet.id.includes('metamask') || wallet.id.includes('coinbase') || wallet.id.includes('walletconnect')) {
           // Ethereum wallet connection
           const accounts = await wallet.provider.request({ 
             method: 'eth_requestAccounts' 
           })
-          setAddress(accounts[0])
+          walletAddress = accounts[0]
         }
       } else {
         // Demo wallet connection
-        setTimeout(() => {
-          setAddress('0x742d35Cc6634C0532925a3b844Bc454e4438f44e')
-          setConnected(true)
-          toast.success(`${wallet.name} connected`)
-          // Redirect to dashboard after successful connection
-          navigate('/dashboard')
-        }, 1000)
+        walletAddress = '0x742d35Cc6634C0532925a3b844Bc454e4438f44e'
       }
       
-      setConnected(true)
-      toast.success(`${wallet.name} connected`)
-      
-      // Redirect to dashboard after successful connection
-      navigate('/dashboard')
+      if (walletAddress) {
+        // Authenticate with backend
+        const authData = await connectWallet({
+          address: walletAddress,
+          walletType: wallet.id,
+          timestamp: Date.now()
+        })
+        
+        // Store token
+        localStorage.setItem('float_token', authData.token)
+        
+        // Update state
+        setAddress(walletAddress)
+        setConnected(true)
+        
+        toast.success(`${wallet.name} connected successfully`)
+        
+        // Redirect to dashboard
+        navigate('/dashboard')
+      }
     } catch (error) {
       console.error('Wallet connection error:', error)
       toast.error('Failed to connect wallet')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -329,7 +143,18 @@ export const WalletProvider = ({ children }) => {
     setAddress(null)
     setConnected(false)
     setSelectedWallet(null)
+    localStorage.removeItem('float_token')
     toast.info('Wallet disconnected')
+    navigate('/')
+  }
+
+  const refreshBalance = async () => {
+    // In a real implementation, this would fetch from blockchain
+    setBalance({
+      base: Math.floor(Math.random() * 20000) + 10000,
+      mpesa: Math.floor(Math.random() * 50000) + 30000,
+      airtel: Math.floor(Math.random() * 40000) + 20000,
+    })
   }
 
   const openWalletModal = () => {
@@ -346,10 +171,12 @@ export const WalletProvider = ({ children }) => {
       balance, 
       connected, 
       selectedWallet,
+      loading,
       showWalletModal,
       detectWallets,
       connect,
       disconnect,
+      refreshBalance,
       openWalletModal,
       closeWalletModal
     }}>
