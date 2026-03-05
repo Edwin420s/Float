@@ -6,7 +6,7 @@ services:
     container_name: float_postgres
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: 1223
       POSTGRES_DB: float_dev
     ports:
       - "5432:5432"
