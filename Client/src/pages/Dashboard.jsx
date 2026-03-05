@@ -1,6 +1,7 @@
 import { useWallet } from '../context/WalletContext'
 import { useTreasury } from '../context/TreasuryContext'
 import { useFetchTransactions } from '../hooks/useFetchTransactions'
+import { executeAgentAction } from '../utils/api'
 import BalanceCard from '../components/BalanceCard'
 import CashFlowChart from '../components/CashFlowChart'
 import TransactionTable from '../components/TransactionTable'
@@ -9,16 +10,46 @@ import WalletCard from '../components/WalletCard'
 import { toast } from 'react-toastify'
 
 export default function Dashboard() {
-  const { balance } = useWallet()
-  const { recommendations } = useTreasury()
+  const { balance, refreshBalance } = useWallet()
+  const { recommendations, loading: treasuryLoading } = useTreasury()
   const { transactions, loading } = useFetchTransactions()
 
-  const handleActNow = () => {
-    toast.success('Executing payment optimization...')
-    // Simulate agent action
-    setTimeout(() => {
-      toast.success('Payment scheduled! You\'ll save 9% on this invoice.')
-    }, 2000)
+  const handleActNow = async (recommendation) => {
+    try {
+      toast.loading('Executing agent action...')
+      
+      const result = await executeAgentAction({
+        action: recommendation.action,
+        data: recommendation.data
+      })
+
+      if (result.success) {
+        toast.success(`Action executed! Transaction: ${result.txHash?.substring(0, 10)}...`)
+        
+        // Refresh data
+        refreshBalance()
+        
+        // Show specific success message based on action
+        switch (recommendation.action) {
+          case 'execute_payment':
+            toast.success(`Payment of $${recommendation.data.amount} sent to ${recommendation.data.recipient}`)
+            break
+          case 'allocate_funds':
+            toast.success('Treasury allocation updated successfully')
+            break
+          case 'optimize_payment':
+            toast.success(`Payment method optimized - saved $${recommendation.savings}`)
+            break
+          default:
+            toast.success('Action completed successfully')
+        }
+      } else {
+        toast.error('Action failed')
+      }
+    } catch (error) {
+      console.error('Agent action error:', error)
+      toast.error('Failed to execute action')
+    }
   }
 
   return (
@@ -52,10 +83,17 @@ export default function Dashboard() {
                 key={rec.id} 
                 text={rec.text} 
                 type={rec.type}
-                onAction={rec.type === 'positive' ? handleActNow : null}
+                onAction={rec.action ? () => handleActNow(rec) : null}
                 actionText="ACT NOW"
+                priority={rec.priority}
+                savings={rec.savings}
               />
             ))}
+            {treasuryLoading && (
+              <div className="text-textSecondary text-center py-4">
+                Loading recommendations...
+              </div>
+            )}
           </div>
         </div>
       </div>
