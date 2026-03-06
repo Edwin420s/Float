@@ -9,7 +9,7 @@ contract TreasuryAllocation is Ownable {
         string action;    // e.g., "move 20% to reserve"
         bool active;
     }
-
+ 
     Rule[] public rules;
 
     event RuleAdded(uint256 index, string condition, string action);
