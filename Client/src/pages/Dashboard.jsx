@@ -11,7 +11,7 @@ import { toast } from 'react-toastify'
 
 export default function Dashboard() {
   const { balance, refreshBalance } = useWallet()
-  const { recommendations, loading: treasuryLoading } = useTreasury()
+  const { recommendations, completedActions, recordCompletedAction, loading: treasuryLoading } = useTreasury()
   const { transactions, loading } = useFetchTransactions()
 
   const handleActNow = async (recommendation) => {
@@ -25,6 +25,9 @@ export default function Dashboard() {
 
       if (result.success) {
         toast.success(`Action executed! Transaction: ${result.txHash?.substring(0, 10)}...`)
+        
+        // Record the completed action
+        recordCompletedAction(recommendation, result)
         
         // Refresh data
         refreshBalance()
@@ -92,6 +95,34 @@ export default function Dashboard() {
             {treasuryLoading && (
               <div className="text-textSecondary text-center py-4">
                 Loading recommendations...
+              </div>
+            )}
+            
+            {completedActions.length > 0 && (
+              <div className="mt-8">
+                <h3 className="text-xl font-semibold mb-4">Completed Actions</h3>
+                <div className="space-y-3">
+                  {completedActions.map(action => (
+                    <div key={action.id} className="bg-success bg-opacity-10 border border-success rounded-lg p-4">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <p className="text-sm font-medium text-success">{action.text}</p>
+                          <p className="text-xs text-textSecondary mt-1">
+                            {new Date(action.timestamp).toLocaleString()}
+                          </p>
+                          {action.savings > 0 && (
+                            <p className="text-xs text-success mt-1">
+                              Saved: ${action.savings}
+                            </p>
+                          )}
+                        </div>
+                        <div className="text-xs text-success font-mono">
+                          ✓ Done
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </div>

@@ -15,6 +15,7 @@ export const TreasuryProvider = ({ children }) => {
     { id: 1, condition: 'Balance > 50000', action: 'Move 20% to reserve', active: true },
   ])
   const [recommendations, setRecommendations] = useState([])
+  const [completedActions, setCompletedActions] = useState([])
   const [loading, setLoading] = useState(false)
 
   // Fetch treasury data on mount
@@ -46,8 +47,30 @@ export const TreasuryProvider = ({ children }) => {
         console.error('Failed to load recommendations:', error)
         // Fallback recommendations
         setRecommendations([
-          { id: 1, text: 'Pay invoice early to save 9%', type: 'positive', action: 'execute_payment' },
-          { id: 2, text: 'High transaction fees detected on M-Pesa', type: 'warning', action: 'optimize_payment' },
+          { 
+            id: 1, 
+            text: 'Pay invoice early to save 9%', 
+            type: 'positive', 
+            action: 'execute_payment',
+            data: { amount: 6000, recipient: 'Supplier Co.', invoiceId: 'INV-001' },
+            savings: 540
+          },
+          { 
+            id: 2, 
+            text: 'High transaction fees detected on M-Pesa', 
+            type: 'warning', 
+            action: 'optimize_payment',
+            data: { currentMethod: 'mpesa', suggestedMethod: 'base', transactionId: 'TXN-002' },
+            savings: 45
+          },
+          { 
+            id: 3, 
+            text: 'Consider moving 20% to reserve for stability', 
+            type: 'info', 
+            action: 'allocate_funds',
+            data: { percentage: 20, from: 'operations', to: 'reserve' },
+            savings: 0
+          }
         ])
       }
     }
@@ -124,6 +147,24 @@ export const TreasuryProvider = ({ children }) => {
     }
   }
 
+  const recordCompletedAction = (recommendation, result) => {
+    const completedAction = {
+      id: Date.now(),
+      recommendationId: recommendation.id,
+      action: recommendation.action,
+      text: recommendation.text,
+      data: recommendation.data,
+      savings: recommendation.savings,
+      result: result,
+      timestamp: new Date().toISOString()
+    }
+    
+    setCompletedActions(prev => [...prev, completedAction])
+    
+    // Remove the recommendation from active list
+    setRecommendations(prev => prev.filter(r => r.id !== recommendation.id))
+  }
+
   return (
     <TreasuryContext.Provider value={{
       allocation, 
@@ -133,6 +174,8 @@ export const TreasuryProvider = ({ children }) => {
       removeRule,
       toggleRule,
       recommendations,
+      completedActions,
+      recordCompletedAction,
       loading
     }}>
       {children}

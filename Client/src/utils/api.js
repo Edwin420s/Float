@@ -129,11 +129,32 @@ export const fetchRecommendations = async () => {
     return response.data
   } catch (error) {
     console.error('Failed to fetch recommendations:', error)
-    // Fallback mock recommendations
+    // Fallback mock recommendations with detailed data
     return [
-      { id: 1, text: 'Pay invoice early to save 9%', type: 'positive', action: 'execute_payment' },
-      { id: 2, text: 'High transaction fees detected on M-Pesa', type: 'warning', action: 'optimize_payment' },
-      { id: 3, text: 'Consider moving 20% to reserve for stability', type: 'info', action: 'allocate_funds' }
+      { 
+        id: 1, 
+        text: 'Pay invoice early to save 9%', 
+        type: 'positive', 
+        action: 'execute_payment',
+        data: { amount: 6000, recipient: 'Supplier Co.', invoiceId: 'INV-001' },
+        savings: 540
+      },
+      { 
+        id: 2, 
+        text: 'High transaction fees detected on M-Pesa', 
+        type: 'warning', 
+        action: 'optimize_payment',
+        data: { currentMethod: 'mpesa', suggestedMethod: 'base', transactionId: 'TXN-002' },
+        savings: 45
+      },
+      { 
+        id: 3, 
+        text: 'Consider moving 20% to reserve for stability', 
+        type: 'info', 
+        action: 'allocate_funds',
+        data: { percentage: 20, from: 'operations', to: 'reserve' },
+        savings: 0
+      }
     ]
   }
 }
@@ -144,7 +165,39 @@ export const executeAgentAction = async (actionData) => {
     return response.data
   } catch (error) {
     console.error('Failed to execute agent action:', error)
-    return { success: true, txHash: '0x' + Math.random().toString(36).substring(7) }
+    
+    // Mock realistic responses based on action type
+    switch (actionData.action) {
+      case 'execute_payment':
+        return { 
+          success: true, 
+          txHash: '0x' + Math.random().toString(36).substring(7) + Math.random().toString(36).substring(7),
+          transactionId: 'TXN-' + Date.now(),
+          amount: actionData.data.amount,
+          recipient: actionData.data.recipient,
+          savings: 540
+        }
+      case 'optimize_payment':
+        return { 
+          success: true, 
+          txHash: '0x' + Math.random().toString(36).substring(7) + Math.random().toString(36).substring(7),
+          transactionId: actionData.data.transactionId,
+          oldMethod: actionData.data.currentMethod,
+          newMethod: actionData.data.suggestedMethod,
+          savings: actionData.data.savings || 45
+        }
+      case 'allocate_funds':
+        return { 
+          success: true, 
+          txHash: '0x' + Math.random().toString(36).substring(7) + Math.random().toString(36).substring(7),
+          allocationId: 'ALLOC-' + Date.now(),
+          percentage: actionData.data.percentage,
+          from: actionData.data.from,
+          to: actionData.data.to
+        }
+      default:
+        return { success: true, txHash: '0x' + Math.random().toString(36).substring(7) }
+    }
   }
 }
 

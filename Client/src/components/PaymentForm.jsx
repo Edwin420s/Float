@@ -10,7 +10,7 @@ const schema = z.object({
   method: z.string().min(1),
 })
 
-export default function PaymentForm({ onSubmit }) {
+export default function PaymentForm({ onSubmit, disabled }) {
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -24,24 +24,35 @@ export default function PaymentForm({ onSubmit }) {
       <h2 className="text-xl font-semibold">New Payment</h2>
       <div>
         <label className="block text-textSecondary mb-1">To</label>
-        <input {...register('to')} className="w-full bg-primary p-2 rounded" />
+        <input 
+          {...register('to')} 
+          className="w-full bg-primary p-2 rounded" 
+          disabled={disabled}
+        />
         {errors.to && <p className="text-error text-sm">{errors.to.message}</p>}
       </div>
       <div>
         <label className="block text-textSecondary mb-1">Amount (USDC)</label>
-        <input type="number" {...register('amount', { valueAsNumber: true })} className="w-full bg-primary p-2 rounded" />
+        <input 
+          type="number" 
+          {...register('amount', { valueAsNumber: true })} 
+          className="w-full bg-primary p-2 rounded" 
+          disabled={disabled}
+        />
         {errors.amount && <p className="text-error text-sm">{errors.amount.message}</p>}
         <p className="text-textSecondary text-sm mt-1">6,000 USDC</p>
       </div>
       <div>
         <label className="block text-textSecondary mb-1">Payment Method</label>
-        <select {...register('method')} className="w-full bg-primary p-2 rounded">
+        <select {...register('method')} className="w-full bg-primary p-2 rounded" disabled={disabled}>
           {PAYMENT_METHODS.map(m => (
             <option key={m.id} value={m.id}>{m.icon} {m.name}</option>
           ))}
         </select>
       </div>
-      <CTAButton type="submit">Pay Now</CTAButton>
+      <CTAButton type="submit" disabled={disabled}>
+        {disabled ? 'Processing...' : 'Pay Now'}
+      </CTAButton>
     </form>
   )
 }
