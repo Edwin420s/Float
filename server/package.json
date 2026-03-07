@@ -6,6 +6,8 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
+    "compile": "node scripts/compile-contracts.js",
+    "deploy": "npx hardhat run scripts/deploy.js --network baseSepolia",
     "migrate": "npx sequelize-cli db:migrate",
     "migrate:undo": "npx sequelize-cli db:migrate:undo",
     "seed": "node scripts/seed.js",

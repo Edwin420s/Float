@@ -3,6 +3,7 @@ const logger = require('../utils/logger');
 const paymentQueue = require('../jobs/paymentQueue');
 const notificationQueue = require('../jobs/notificationQueue');
 const agentScheduler = require('../services/agentScheduler');
+const blockchainService = require('../services/blockchainService');
 
 module.exports = async () => {
   try {
@@ -15,6 +16,9 @@ module.exports = async () => {
       await sequelize.sync({ alter: true });
       logger.info('Database synchronized');
     }
+
+    // Initialize treasury contract service
+    await blockchainService.initializeTreasuryService();
 
     // Start queues (they will listen for jobs)
     paymentQueue.on('error', (err) => logger.error('Payment queue error', err));

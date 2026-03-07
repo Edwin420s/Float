@@ -1,16 +1,6 @@
 const { ethers } = require('ethers');
+const treasuryContractService = require('./treasuryContractService');
 const logger = require('../utils/logger');
-
-// AgentTreasury Contract ABI (simplified version)
-const AgentTreasuryABI = [
-  "function executePayment(address to, uint256 amount, address token) external",
-  "function authoriseAgent(address agent) external",
-  "function revokeAgent(address agent) external",
-  "function balanceOf(address token) view returns (uint256)",
-  "event PaymentExecuted(address indexed to, uint256 amount, address token)",
-  "event AgentAuthorised(address agent)",
-  "event AgentRevoked(address agent)"
-];
 
 // ERC20 ABI for USDC interactions
 const ERC20ABI = [
@@ -41,55 +31,52 @@ exports.deployAgentTreasury = async (userId) => {
   try {
     const signer = getSigner();
     if (!signer) {
-      // Return mock address for demo
-      const mockAddress = `0x${userId.replace(/-/g, '').substring(0, 40)}`;
+      // Use treasury contract service for mock deployment
+      const agentAddress = process.env.AGENT_ADDRESS || '0x0000000000000000000000000000000000000000000';
+      const mockAddress = await treasuryContractService.deployTreasury(userId, agentAddress);
       logger.info(`Mock AgentTreasury deployed for user ${userId} at ${mockAddress}`);
       return mockAddress;
     }
 
-    // In a real implementation, you would have the compiled bytecode
-    // For demo, return a deterministic mock address
-    const mockAddress = `0x${userId.replace(/-/g, '').substring(0, 40)}`;
-    logger.info(`AgentTreasury deployed for user ${userId} at ${mockAddress}`);
-    return mockAddress;
+    // Get agent address from environment or use signer address
+    const agentAddress = process.env.AGENT_ADDRESS || await signer.getAddress();
+    
+    // Deploy through treasury contract service
+    const contractAddress = await treasuryContractService.deployTreasury(userId, agentAddress);
+    logger.info(`AgentTreasury deployed for user ${userId} at ${contractAddress}`);
+    return contractAddress;
   } catch (error) {
     logger.error('Deployment failed', error);
     throw error;
   }
 };
 
-// Execute a payment from user's treasury
-exports.executePayment = async (treasuryAddress, to, amount, tokenAddress) => {
+// Execute a payment from user's treasury using the new contract
+exports.executePayment = async (treasuryAddress, to, amount, tokenAddress, invoiceId, savings = 0) => {
   try {
-    const signer = getSigner();
-    if (!signer) {
-      // Mock transaction for demo
-      const mockTxHash = `0x${Date.now().toString(16)}${Math.random().toString(16).substring(2)}`;
-      logger.info(`Mock payment executed: ${mockTxHash}`);
-      return mockTxHash;
-    }
-
-    const treasury = new ethers.Contract(treasuryAddress, AgentTreasuryABI, signer);
-    const amountWei = ethers.parseUnits(amount.toString(), 6); // USDC uses 6 decimals
+    // Use treasury contract service for payment execution
+    const txHash = await treasuryContractService.executePayment(
+      treasuryAddress,
+      to,
+      amount,
+      tokenAddress || '0x036CbD53842c5426634e7929541eC2318f3dcF7e', // USDC on Base
+      invoiceId || `inv_${Date.now()}`,
+      savings
+    );
     
-    const tx = await treasury.executePayment(to, amountWei, tokenAddress || '0x0000000000000000000000000000000000000000');
-    const receipt = await tx.wait();
-    
-    logger.info(`Payment executed: ${receipt.hash}`);
-    return receipt.hash;
+    logger.info(`Payment executed via treasury contract: ${txHash}`);
+    return txHash;
   } catch (error) {
     logger.error('Payment execution failed', error);
     throw error;
   }
 };
 
-// Get token balance
-exports.getTokenBalance = async (walletAddress, tokenAddress) => {
+// Get token balance using treasury contract service
+exports.getTokenBalance = async (treasuryAddress, tokenAddress) => {
   try {
-    const provider = getProvider();
-    const tokenContract = new ethers.Contract(tokenAddress, ERC20ABI, provider);
-    const balance = await tokenContract.balanceOf(walletAddress);
-    return ethers.formatUnits(balance, 6); // USDC uses 6 decimals
+    const balance = await treasuryContractService.getBalance(treasuryAddress, tokenAddress);
+    return balance.toString();
   } catch (error) {
     logger.error('Failed to get token balance', error);
     return '0';
@@ -97,14 +84,38 @@ exports.getTokenBalance = async (walletAddress, tokenAddress) => {
 };
 
 // Get native ETH balance
-exports.getNativeBalance = async (walletAddress) => {
+exports.getNativeBalance = async (treasuryAddress) => {
   try {
-    const provider = getProvider();
-    const balance = await provider.getBalance(walletAddress);
-    return ethers.formatEther(balance);
+    const balance = await treasuryContractService.getBalance(treasuryAddress, '0x0000000000000000000000000000000000000000000');
+    return balance.toString();
   } catch (error) {
     logger.error('Failed to get native balance', error);
     return '0';
+  }
+};
+
+// Get treasury summary
+exports.getTreasurySummary = async (treasuryAddress) => {
+  try {
+    return await treasuryContractService.getTreasurySummary(treasuryAddress);
+  } catch (error) {
+    logger.error('Failed to get treasury summary', error);
+    return {
+      totalBalance: 0,
+      totalSavings: 0,
+      paymentCount: '0',
+      currentAgent: null
+    };
+  }
+};
+
+// Get payment details from treasury contract
+exports.getPaymentDetails = async (treasuryAddress, invoiceId) => {
+  try {
+    return await treasuryContractService.getPayment(treasuryAddress, invoiceId);
+  } catch (error) {
+    logger.error('Failed to get payment details', error);
+    return null;
   }
 };
 
@@ -145,10 +156,7 @@ exports.parseAmount = (amount, decimals = 6) => {
 // Get transaction details
 exports.getTransaction = async (txHash) => {
   try {
-    const provider = getProvider();
-    const tx = await provider.getTransaction(txHash);
-    const receipt = await provider.getTransactionReceipt(txHash);
-    return { tx, receipt };
+    return await treasuryContractService.getTransaction(txHash);
   } catch (error) {
     logger.error('Failed to get transaction details', error);
     return null;
@@ -183,8 +191,18 @@ exports.getGasPrice = async () => {
   }
 };
 
+// Initialize treasury contract service
+exports.initializeTreasuryService = async () => {
+  try {
+    await treasuryContractService.initialize();
+    logger.info('Treasury contract service initialized');
+  } catch (error) {
+    logger.error('Failed to initialize treasury contract service', error);
+    throw error;
+  }
+};
+
 module.exports = {
-  AgentTreasuryABI,
   ERC20ABI,
   getProvider,
   getSigner

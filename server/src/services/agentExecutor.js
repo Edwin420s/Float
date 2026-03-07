@@ -178,12 +178,14 @@ class AgentExecutor {
         throw new Error('Treasury not deployed');
       }
 
-      // Execute blockchain payment
+      // Execute blockchain payment using new contract with invoice tracking
       const txHash = await blockchainService.executePayment(
         treasury.treasuryAddress,
         data.recipient,
         data.amount,
-        '0x036CbD53842c5426634e7929541eC2318f3dcF7e' // USDC address on Base
+        '0x036CbD53842c5426634e7929541eC2318f3dcF7e', // USDC address on Base
+        data.invoiceId || `inv_${Date.now()}`,
+        decision.potentialSavings // Pass savings to contract
       );
 
       // Calculate actual savings
@@ -198,7 +200,8 @@ class AgentExecutor {
           amount: data.amount,
           currency: data.currency,
           paymentMethod: 'base',
-          type: 'early_payment_discount'
+          type: 'early_payment_discount',
+          invoiceId: data.invoiceId
         },
         transaction: {
           userId,
@@ -213,7 +216,8 @@ class AgentExecutor {
             agentInitiated: true,
             decisionId: decision.opportunityId,
             savings,
-            reason: `Early payment discount - save $${savings.toFixed(2)}`
+            reason: `Early payment discount - save $${savings.toFixed(2)}`,
+            invoiceId: data.invoiceId
           }
         }
       };
