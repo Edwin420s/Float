@@ -1,5 +1,6 @@
 const { ethers } = require('ethers');
-const AgentTreasuryABI = require('../contracts/AgentTreasury.json');
+const path = require('path');
+const AgentTreasuryABI = require(path.join(__dirname, '../../contracts/AgentTreasury.json'));
 const logger = require('../utils/logger');
 
 class TreasuryContractService {

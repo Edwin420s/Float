@@ -27,7 +27,7 @@ const getSigner = () => {
 };
 
 // Deploy AgentTreasury contract for a user
-exports.deployAgentTreasury = async (userId) => {
+const deployAgentTreasury = async (userId) => {
   try {
     const signer = getSigner();
     if (!signer) {
@@ -52,7 +52,7 @@ exports.deployAgentTreasury = async (userId) => {
 };
 
 // Execute a payment from user's treasury using the new contract
-exports.executePayment = async (treasuryAddress, to, amount, tokenAddress, invoiceId, savings = 0) => {
+const executePayment = async (treasuryAddress, to, amount, tokenAddress, invoiceId, savings = 0) => {
   try {
     // Use treasury contract service for payment execution
     const txHash = await treasuryContractService.executePayment(
@@ -73,7 +73,7 @@ exports.executePayment = async (treasuryAddress, to, amount, tokenAddress, invoi
 };
 
 // Get token balance using treasury contract service
-exports.getTokenBalance = async (treasuryAddress, tokenAddress) => {
+const getTokenBalance = async (treasuryAddress, tokenAddress) => {
   try {
     const balance = await treasuryContractService.getBalance(treasuryAddress, tokenAddress);
     return balance.toString();
@@ -84,7 +84,7 @@ exports.getTokenBalance = async (treasuryAddress, tokenAddress) => {
 };
 
 // Get native ETH balance
-exports.getNativeBalance = async (treasuryAddress) => {
+const getNativeBalance = async (treasuryAddress) => {
   try {
     const balance = await treasuryContractService.getBalance(treasuryAddress, '0x0000000000000000000000000000000000000000000');
     return balance.toString();
@@ -95,7 +95,7 @@ exports.getNativeBalance = async (treasuryAddress) => {
 };
 
 // Get treasury summary
-exports.getTreasurySummary = async (treasuryAddress) => {
+const getTreasurySummary = async (treasuryAddress) => {
   try {
     return await treasuryContractService.getTreasurySummary(treasuryAddress);
   } catch (error) {
@@ -110,7 +110,7 @@ exports.getTreasurySummary = async (treasuryAddress) => {
 };
 
 // Get payment details from treasury contract
-exports.getPaymentDetails = async (treasuryAddress, invoiceId) => {
+const getPaymentDetails = async (treasuryAddress, invoiceId) => {
   try {
     return await treasuryContractService.getPayment(treasuryAddress, invoiceId);
   } catch (error) {
@@ -120,7 +120,7 @@ exports.getPaymentDetails = async (treasuryAddress, invoiceId) => {
 };
 
 // x402 payment simulation – send a payment to another agent via HTTP with x402 header
-exports.sendX402Payment = async (targetUrl, amount, invoiceId) => {
+const sendX402Payment = async (targetUrl, amount, invoiceId) => {
   try {
     const axios = require('axios');
     // Construct x402 header (simplified)
@@ -139,22 +139,22 @@ exports.sendX402Payment = async (targetUrl, amount, invoiceId) => {
 };
 
 // Validate wallet address format
-exports.isValidAddress = (address) => {
+const isValidAddress = (address) => {
   return ethers.isAddress(address);
 };
 
 // Format amount for display
-exports.formatAmount = (amount, decimals = 6) => {
+const formatAmount = (amount, decimals = 6) => {
   return ethers.formatUnits(amount, decimals);
 };
 
 // Parse amount for transactions
-exports.parseAmount = (amount, decimals = 6) => {
+const parseAmount = (amount, decimals = 6) => {
   return ethers.parseUnits(amount.toString(), decimals);
 };
 
 // Get transaction details
-exports.getTransaction = async (txHash) => {
+const getTransaction = async (txHash) => {
   try {
     return await treasuryContractService.getTransaction(txHash);
   } catch (error) {
@@ -164,7 +164,7 @@ exports.getTransaction = async (txHash) => {
 };
 
 // Estimate gas for transaction
-exports.estimateGas = async (to, data, value = '0') => {
+const estimateGas = async (to, data, value = '0') => {
   try {
     const provider = getProvider();
     const gasEstimate = await provider.estimateGas({
@@ -180,7 +180,7 @@ exports.estimateGas = async (to, data, value = '0') => {
 };
 
 // Get current gas price
-exports.getGasPrice = async () => {
+const getGasPrice = async () => {
   try {
     const provider = getProvider();
     const feeData = await provider.getFeeData();
@@ -192,7 +192,7 @@ exports.getGasPrice = async () => {
 };
 
 // Initialize treasury contract service
-exports.initializeTreasuryService = async () => {
+const initializeTreasuryService = async () => {
   try {
     await treasuryContractService.initialize();
     logger.info('Treasury contract service initialized');
@@ -205,5 +205,19 @@ exports.initializeTreasuryService = async () => {
 module.exports = {
   ERC20ABI,
   getProvider,
-  getSigner
+  getSigner,
+  deployAgentTreasury,
+  executePayment,
+  getTokenBalance,
+  getNativeBalance,
+  getTreasurySummary,
+  getPaymentDetails,
+  sendX402Payment,
+  isValidAddress,
+  formatAmount,
+  parseAmount,
+  getTransaction,
+  estimateGas,
+  getGasPrice,
+  initializeTreasuryService
 };
