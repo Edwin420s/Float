@@ -254,10 +254,10 @@ Enables machine-to-machine payments:
 ✅ **Autonomy**: Agent operates without human intervention  
 
 ### Judging Criteria Strengths
-- **Technical Execution (35%)**: Full stack with live onchain transactions
-- **Problem-Market Fit (25%)**: Real African SME pain point
-- **Base/x402 Integration (20%)**: Deep protocol alignment
-- **Demo Quality (20%)**: Professional, clear presentation
+- **Technical Execution**: Full stack with live onchain transactions
+- **Problem-Market Fit**: Real African SME pain point
+- **Base/x402 Integration**: Deep protocol alignment
+- **Demo Quality**: Professional, clear presentation
 
 ## 🛠️ Development Stack
 
