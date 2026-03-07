@@ -2,6 +2,7 @@ const { sequelize } = require('../models');
 const logger = require('../utils/logger');
 const paymentQueue = require('../jobs/paymentQueue');
 const notificationQueue = require('../jobs/notificationQueue');
+const agentScheduler = require('../services/agentScheduler');
 
 module.exports = async () => {
   try {
@@ -18,6 +19,10 @@ module.exports = async () => {
     // Start queues (they will listen for jobs)
     paymentQueue.on('error', (err) => logger.error('Payment queue error', err));
     notificationQueue.on('error', (err) => logger.error('Notification queue error', err));
+
+    // Start autonomous agent scheduler
+    await agentScheduler.start();
+    logger.info('Autonomous agent scheduler started');
 
     logger.info('All loaders initialized successfully');
   } catch (error) {
