@@ -244,21 +244,6 @@ Enables machine-to-machine payments:
 4. Base network executes payment
 5. Dashboard updates with confirmation
 
-## 🏆 JengaHacks 2026 Alignment
-
-### Competition Requirements Met
-✅ **AI Agent**: Autonomous decision-making with clear reasoning  
-✅ **Base Network**: Onchain execution with smart wallets  
-✅ **x402 Integration**: HTTP-native payment protocol  
-✅ **Real Use Case**: SME treasury optimization in Africa  
-✅ **Autonomy**: Agent operates without human intervention  
-
-### Judging Criteria Strengths
-- **Technical Execution**: Full stack with live onchain transactions
-- **Problem-Market Fit**: Real African SME pain point
-- **Base/x402 Integration**: Deep protocol alignment
-- **Demo Quality**: Professional, clear presentation
-
 ## 🛠️ Development Stack
 
 ### Frontend Dependencies
