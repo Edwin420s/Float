@@ -25,10 +25,10 @@ async function deployToGanache() {
       contractData = JSON.parse(fs.readFileSync(contractPath, 'utf8'));
       console.log('✅ Using compiled contract from artifacts');
     } catch (error) {
-      console.log('⚠️  No compiled contract found, using mock deployment');
-      // Use the existing deployment info
+      console.log('⚠️  No compiled contract found, using mock contract');
+      // Use the existing contract JSON
       contractData = {
-        abi: JSON.parse(fs.readFileSync('../contracts/AgentTreasury.json', 'utf8')).abi,
+        abi: JSON.parse(fs.readFileSync(path.join(__dirname, '../contracts/AgentTreasury.json'), 'utf8')).abi,
         bytecode: '0x608060405234801561001057600080fd5b50' // Mock bytecode
       };
     }
