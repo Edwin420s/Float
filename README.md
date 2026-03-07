@@ -2,9 +2,6 @@
 
 > Autonomous SME Treasury Agent for JengaHacks 2026
 
-![Float Architecture](./docs/images/architecture-diagram.png)
-![UI Flow](./docs/images/ui-flow-diagram.png)
-
 ## 🎯 Project Overview
 
 Float is an autonomous treasury agent that helps Small and Medium Enterprises (SMEs) operating across fragmented mobile money and banking systems optimize their liquidity through intelligent, automated financial decisions. Built for the JengaHacks 2026 competition, Float demonstrates the power of AI agents operating on the Base network with x402 payment protocols.
@@ -25,6 +22,19 @@ Float is an **autonomous treasury operator** that:
 - Evaluates financial decisions using economic intelligence
 - Executes optimized actions automatically on Base network
 - Demonstrates true agent autonomy with onchain treasury management
+
+## 👥 Target Users
+
+### Primary Users: Small Business Owners
+- Retail shop owners, wholesalers, small manufacturers
+- E-commerce sellers, service providers
+- Businesses managing $5K - $100K monthly revenue
+- Users of M-Pesa, Airtel Money, MTN Mobile Money
+
+### Secondary Users
+- Finance managers in larger SMEs
+- Suppliers seeking faster payments
+- Accountants needing transparent records
 
 ## 🏗️ Technical Architecture
 
@@ -130,6 +140,50 @@ Step-by-step demonstration:
 - Clear information hierarchy
 - Mobile-responsive layout
 
+## 🤖 Agent Working System
+
+### Decision Engine Workflow
+The Float agent operates in a continuous 4-stage cycle:
+
+#### 1. Observation Phase
+- Monitors wallet balances across platforms
+- Tracks incoming supplier invoices
+- Analyzes payment deadlines and discount terms
+- Maintains real-time liquidity state
+
+#### 2. Opportunity Detection
+- Scans for early payment discounts
+- Identifies optimization opportunities
+- Evaluates cross-platform arbitrage possibilities
+- Detects liquidity inefficiencies
+
+#### 3. Decision Evaluation
+- Performs safety checks (minimum reserves)
+- Calculates cost-benefit analysis
+- Assesses risk factors
+- Determines optimal action timing
+
+#### 4. Autonomous Execution
+- Executes payments via smart contracts
+- Records transactions on Base blockchain
+- Updates dashboard with results
+- Logs decision reasoning
+
+### Example Agent Scenario
+```
+Invoice: $2,000 from Supplier X
+Due: 10 days
+Early Payment Discount: 9%
+Available Liquidity: $8,000
+Minimum Reserve: $4,000
+
+Agent Analysis:
+- Potential Savings: $180
+- Liquidity After Payment: $6,000 (above minimum)
+- Decision: PAY EARLY
+- Action: Execute via Base network
+```
+
 ## 📊 Technical Implementation
 
 ### Smart Contracts
@@ -166,6 +220,29 @@ const evaluatePayment = (liquidity, invoice, borrowingRate) => {
     return { action: 'WAIT', reasoning: 'Borrowing cheaper than early payment' };
 };
 ```
+
+## 🔗 Blockchain Integration
+
+### Base Network Role
+Base serves as the secure settlement layer:
+- **Treasury Storage**: Funds held in smart contracts
+- **Payment Execution**: Transparent, verifiable transactions
+- **Record Keeping**: Immutable payment history
+- **Trust Layer**: No single point of failure
+
+### x402 Payment Protocol
+Enables machine-to-machine payments:
+- Agent pays Risk Oracle for data analysis
+- Service-to-service transactions
+- HTTP-native payment headers
+- Autonomous economic interactions
+
+### Transaction Flow
+1. Agent detects opportunity
+2. Backend prepares transaction
+3. Smart contract validates rules
+4. Base network executes payment
+5. Dashboard updates with confirmation
 
 ## 🏆 JengaHacks 2026 Alignment
 
@@ -230,11 +307,7 @@ Float/
 │   │   └── contracts/     # Smart contracts
 │   ├── migrations/        # DB migrations
 │   └── package.json
-├── docs/                  # Documentation and images
-│   ├── images/
-│   │   ├── architecture-diagram.png
-│   │   └── ui-flow-diagram.png
-│   └── README_IMPLEMENTATION.md
+├── test_end_to_end.js     # Comprehensive testing suite
 └── README.md
 ```
 
@@ -249,7 +322,7 @@ Float/
 ### Installation
 ```bash
 # Clone repository
-git clone https://github.com/quiet-capital/float.git
+git clone https://github.com/Edwin420s/float.git
 cd float
 
 # Install frontend dependencies
@@ -301,6 +374,20 @@ For JengaHacks demo:
    - Agent pays Risk Oracle via x402 for future analysis
    - Demonstrates autonomous economic interaction
 
+## � Testing & Quality Assurance
+
+### End-to-End Testing
+- Comprehensive test suite (361 lines)
+- API coverage for all endpoints
+- Blockchain transaction verification
+- UI component interaction testing
+
+### Quality Features
+- Error handling and logging
+- Security best practices
+- Performance optimization
+- Mobile responsiveness
+
 ## 🔮 Future Roadmap
 
 ### Post-Hackathon Development
@@ -311,7 +398,7 @@ For JengaHacks demo:
 - SME pilot programs in Kenya, Uganda, Tanzania
 
 ### Long-term Vision
-- Become the treasury operating system for African SMEs
+- Become treasury operating system for African SMEs
 - Expand to cross-border payments and FX optimization
 - Build agent economy marketplace
 - Integrate with traditional banking systems
