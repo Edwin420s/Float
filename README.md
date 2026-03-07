@@ -116,29 +116,29 @@ Step-by-step demonstration:
 
 ## 🚀 Key Features
 
-### ✅ Autonomous Decision Making
-- Agent evaluates liquidity conditions
-- Compares financial options (pay early vs borrow)
-- Executes optimal strategies automatically
-- Provides clear reasoning for each decision
+### ✅ Autonomous Treasury Operations
+- Continuous monitoring of liquidity across mobile money platforms
+- Intelligent payment timing optimization
+- Automated execution of financial decisions
+- Real-time decision reasoning and audit trails
 
-### ✅ Onchain Treasury Management
-- Smart wallet integration on Base network
-- Real USDC transactions
-- Transaction hash verification
-- x402 protocol for machine-to-machine payments
+### ✅ Blockchain-Powered Security
+- Base network integration for transparent transactions
+- Smart contract enforced treasury rules
+- USDC stablecoin payments with verification
+- x402 protocol for machine-to-machine transactions
 
 ### ✅ Mobile Money Integration
-- Multi-wallet liquidity aggregation
-- Cross-platform transaction simulation
+- Multi-platform support (M-Pesa, Airtel, MTN)
+- Cross-wallet liquidity aggregation
 - KES and USDC balance tracking
-- Future real telco API integration
+- Simulated telco API integration
 
-### ✅ Professional UI/UX
-- JengaHacks-ready presentation
-- Investor-quality design
-- Clear information hierarchy
-- Mobile-responsive layout
+### ✅ Professional User Experience
+- Dark-themed professional interface
+- Real-time dashboard with actionable insights
+- Mobile-responsive design
+- Step-by-step demo guidance
 
 ## 🤖 Agent Working System
 
@@ -332,7 +332,6 @@ npm run dev  # Frontend (port 5173)
 ```
 
 ### Demo Mode
-For JengaHacks demo:
 1. Connect wallet on Base testnet
 2. Navigate to Dashboard
 3. Click "Demo Flow" button
@@ -359,7 +358,7 @@ For JengaHacks demo:
    - Agent pays Risk Oracle via x402 for future analysis
    - Demonstrates autonomous economic interaction
 
-## � Testing & Quality Assurance
+## 📊 Testing & Quality Assurance
 
 ### End-to-End Testing
 - Comprehensive test suite (361 lines)
